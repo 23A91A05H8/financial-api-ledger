@@ -1,0 +1,228 @@
+{
+	"info": {
+		"_postman_id": "a89b6413-32c4-4fd8-af73-2a50d16399c0",
+		"name": "Financial API Ledger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50502598",
+		"_collection_link": "https://universal-sunset-5717525.postman.co/workspace/Likhitha's-Workspace~e52da399-d4e2-42b2-8c54-3960bccff99b/collection/50502598-a89b6413-32c4-4fd8-af73-2a50d16399c0?action=share&source=collection_link&creator=50502598"
+	},
+	"item": [
+		{
+			"name": "Create Account – Source",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": \"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\r\n  \"type\": \"savings\",\r\n  \"currency\": \"INR\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Account – Destination",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": \"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb\",\r\n  \"type\": \"checking\",\r\n  \"currency\": \"INR\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deposit – Add Balance",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"accountId\": \"c3f64d66-3d7a-49ed-a8e4-5ba278799a27\",\r\n  \"amount\": 2000,\r\n  \"currency\": \"INR\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/deposits",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"deposits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Withdraw – Success",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"accountId\": \"dbdb5392-74c0-44dc-bb33-0af4bfeea7be\",\r\n  \"amount\": 500,\r\n  \"currency\": \"INR\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/withdrawals",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"withdrawals"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Withdraw – Insufficient Funds",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"accountId\": \"dbdb5392-74c0-44dc-bb33-0af4bfeea7be\",\r\n  \"amount\": 10000,\r\n  \"currency\": \"INR\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/withdrawals",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"withdrawals"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer – A to B",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"sourceAccountId\":  \"dbdb5392-74c0-44dc-bb33-0af4bfeea7be\",\r\n  \"destinationAccountId\": \"5a05292e-38e8-4800-8c7a-c4ceea8059ea\",\r\n  \"amount\": 300,\r\n  \"currency\": \"INR\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Balance – Account A",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/accounts/dbdb5392-74c0-44dc-bb33-0af4bfeea7be",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"accounts",
+						"dbdb5392-74c0-44dc-bb33-0af4bfeea7be"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Ledger – Account A",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/accounts/dbdb5392-74c0-44dc-bb33-0af4bfeea7be/ledger",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"accounts",
+						"dbdb5392-74c0-44dc-bb33-0af4bfeea7be",
+						"ledger"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
