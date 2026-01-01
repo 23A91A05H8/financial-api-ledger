@@ -43,6 +43,13 @@ GET /api/accounts/:accountId/ledger
 ### Transfer Money
 POST /api/transfer
 
+### Deposit Money
+POST /api/deposits
+
+### Withdraw Money
+POST /api/withdrawals
+
+
 ## Database Schema
 - accounts
 - transactions
@@ -56,6 +63,33 @@ Foreign key constraints enforce data integrity.
 2. Configure `.env`
 3. Start server  
    `npm run dev`
+
+## Design Decisions
+
+### Double-Entry Bookkeeping
+The system follows double-entry bookkeeping principles.  
+Every financial operation creates corresponding ledger entries:
+- Transfers create one debit entry from the source account and one credit entry to the destination account.
+- Deposits create a credit entry.
+- Withdrawals create a debit entry.
+This ensures that every transaction is balanced and auditable.
+
+### ACID Transactions
+All database operations related to a financial transaction are executed within a single database transaction using BEGIN and COMMIT.  
+If any step fails, the entire transaction is rolled back to maintain atomicity and consistency.
+
+### Transaction Isolation Level
+The application relies on PostgreSQL’s default READ COMMITTED isolation level.  
+This prevents dirty reads while maintaining good performance and is sufficient for ensuring consistency in concurrent financial operations.
+
+### Balance Calculation and Negative Balance Prevention
+Account balances are not stored in the database.  
+They are calculated dynamically by summing all ledger entries associated with an account.
+Before processing withdrawals, the system checks the calculated balance and rejects any operation that would result in a negative balance.
+
+## API Testing
+All APIs were tested using Thunder Client within VS Code.
+
 
 ## Conclusion
 This system demonstrates safe financial transaction handling with
