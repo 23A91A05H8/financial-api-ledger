@@ -88,7 +88,8 @@ They are calculated dynamically by summing all ledger entries associated with an
 Before processing withdrawals, the system checks the calculated balance and rejects any operation that would result in a negative balance.
 
 ## API Testing
-All APIs were tested using Thunder Client within VS Code.
+All APIs were tested using Postman and Thunder Client. A Postman collection is included in the repository.
+
 
 
 ## Conclusion
