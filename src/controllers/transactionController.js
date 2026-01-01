@@ -49,3 +49,101 @@ export const transferMoney = async (req, res) => {
     client.release();
   }
 };
+
+export const depositMoney = async (req, res) => {
+  const { accountId, amount, currency } = req.body;
+
+  if (!accountId || !amount) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const transactionId = uuidv4();
+
+    await client.query(
+      `INSERT INTO transactions
+       (id, type, destination_account, amount, currency, status)
+       VALUES ($1, 'deposit', $2, $3, $4, 'completed')`,
+      [transactionId, accountId, amount, currency]
+    );
+
+    await client.query(
+      `INSERT INTO ledger_entries
+       (id, account_id, transaction_id, entry_type, amount)
+       VALUES ($1, $2, $3, 'credit', $4)`,
+      [uuidv4(), accountId, transactionId, amount]
+    );
+
+    await client.query("COMMIT");
+    res.json({ message: "Deposit successful", transactionId });
+
+  } catch (err) {
+    await client.query("ROLLBACK");
+    res.status(500).json({ error: err.message });
+  } finally {
+    client.release();
+  }
+};
+
+
+export const withdrawMoney = async (req, res) => {
+  const { accountId, amount, currency } = req.body;
+
+  if (!accountId || !amount) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    // Check balance
+    const balanceResult = await client.query(
+      `SELECT COALESCE(
+        SUM(CASE
+          WHEN entry_type = 'credit' THEN amount
+          WHEN entry_type = 'debit' THEN -amount
+        END), 0) AS balance
+       FROM ledger_entries WHERE account_id = $1`,
+      [accountId]
+    );
+
+    const balance = parseFloat(balanceResult.rows[0].balance);
+
+    if (balance < amount) {
+      throw new Error("Insufficient funds");
+    }
+
+    const transactionId = uuidv4();
+
+    await client.query(
+      `INSERT INTO transactions
+       (id, type, source_account, amount, currency, status)
+       VALUES ($1, 'withdrawal', $2, $3, $4, 'completed')`,
+      [transactionId, accountId, amount, currency]
+    );
+
+    await client.query(
+      `INSERT INTO ledger_entries
+       (id, account_id, transaction_id, entry_type, amount)
+       VALUES ($1, $2, $3, 'debit', $4)`,
+      [uuidv4(), accountId, transactionId, amount]
+    );
+
+    await client.query("COMMIT");
+    res.json({ message: "Withdrawal successful", transactionId });
+
+  } catch (err) {
+    await client.query("ROLLBACK");
+    res.status(422).json({ error: err.message });
+  } finally {
+    client.release();
+  }
+};
+
+
